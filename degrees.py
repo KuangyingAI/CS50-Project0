@@ -102,7 +102,7 @@ def shortest_path(source, target):
     #keep looping until solution found
     while True:
         if frontier.empty():
-            raise Exception("no solution")
+            raise Exception("No solution")
         
         #choose a node from the frontier
         node = frontier.remove()
@@ -110,10 +110,10 @@ def shortest_path(source, target):
         #add neighbors to frontier
         for movie_id, person_id in neighbors_for_person(node.state):
                 if not frontier.contains_state(person_id) and person_id not in explored:
-                    Child = Node(state=person_id, parent=node,action= movie_id)
-                    if Child.state == target:
+                    child = Node(state=person_id, parent=node,action= movie_id)
+                    if child.state == target:
                         solution = []
-                        while Child.parent is not None:
+                        while child.parent is not None:
                             solution.append((child.action,child.state))
                             child= child.parent
                         solution.reverse()
