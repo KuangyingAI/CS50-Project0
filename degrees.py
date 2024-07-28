@@ -1,7 +1,5 @@
 import csv
 import sys
-
-print('hello')
 from util import Node, StackFrontier, QueueFrontier
 
 # Maps names to a set of corresponding person_ids
@@ -15,6 +13,7 @@ movies = {}
 
 
 def load_data(directory):
+    print(f"Loading data from directory: {directory}")
     """
     Load data from CSV files into memory.
     """
@@ -56,7 +55,7 @@ def load_data(directory):
 def main():
     if len(sys.argv) > 2:
         sys.exit("Usage: python degrees.py [directory]")
-    directory = sys.argv[1] if len(sys.argv) == 2 else "large"
+    directory = sys.argv[1] if len(sys.argv) == 2 else "/workspaces/practice/"
 
     # Load data from files into memory
     print("Loading data...")
@@ -92,11 +91,35 @@ def shortest_path(source, target):
 
     If no possible path, returns None.
     """
-
     # TODO
-    raise NotImplementedError
+    start = Node(state = source,parent=None,action=None)
+    frontier = QueueFrontier()
+    frontier.add(start)
 
+    #initialize an empty explored set
+    explored = set()
 
+    #keep looping until solution found
+    while True:
+        if frontier.empty():
+            raise Exception("no solution")
+        
+        #choose a node from the frontier
+        node = frontier.remove()
+        explored.add(node.state)
+        #add neighbors to frontier
+        for movie_id, person_id in neighbors_for_person(node.state):
+                if not frontier.contains_state(person_id) and person_id not in explored:
+                    Child = Node(state=person_id, parent=node,action= movie_id)
+                    if Child.state == target:
+                        solution = []
+                        while Child.parent is not None:
+                            solution.append((child.action,child.state))
+                            child= child.parent
+                        solution.reverse()
+                        return solution
+                    frontier.add(child)
+        
 def person_id_for_name(name):
     """
     Returns the IMDB id for a person's name,
